@@ -1,4 +1,5 @@
 library(shiny)
+library(shinyvalidate)
 
 generate_story <- function(noun, verb, adjective, adverb) {
   glue::glue("
@@ -25,6 +26,11 @@ ui <- fluidPage(
 )
 
 server <- function(input, output) {
+  # input validation
+  iv <- InputValidator$new()
+  iv$add_rule("noun1", sv_required())
+  iv$enable()
+  
   story <- eventReactive(input$submit, {
     generate_story(input$noun1, input$verb, input$adjective, input$adverb)
   })
