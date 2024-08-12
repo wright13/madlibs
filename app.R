@@ -1,5 +1,6 @@
 library(shiny)
 library(shinyvalidate)
+library(useself)
 
 generate_story <- function(noun, verb, adjective, adverb) {
   glue::glue("
@@ -37,6 +38,9 @@ server <- function(input, output) {
   output$story <- renderText({
     story()
   })
+  
+  # try out logging
+  cat(glue::glue("noun: {input$noun1}"), file = stderr())
 }
 
 shinyApp(ui = ui, server = server)
