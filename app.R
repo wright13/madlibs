@@ -3,10 +3,14 @@ library(shinyvalidate)
 library(useself)
 
 generate_story <- function(noun, verb, adjective, adverb) {
-  glue::glue("
+  story <- glue::glue("
     Once upon a time, there was a {adjective} {noun} who loved to
     {verb} {adverb}. It was the funniest thing ever!
   ")
+  
+  cat(story, file = stderr())
+  
+  return(story)
 }
 
 ui <- fluidPage(
@@ -33,14 +37,12 @@ server <- function(input, output) {
   iv$enable()
   
   story <- eventReactive(input$submit, {
+    cat(input$noun1, file = stderr())
     generate_story(input$noun1, input$verb, input$adjective, input$adverb)
   })
   output$story <- renderText({
     story()
   })
-  
-  # try out logging
-  cat(glue::glue("noun: {input$noun1}"), file = stderr())
 }
 
 shinyApp(ui = ui, server = server)
